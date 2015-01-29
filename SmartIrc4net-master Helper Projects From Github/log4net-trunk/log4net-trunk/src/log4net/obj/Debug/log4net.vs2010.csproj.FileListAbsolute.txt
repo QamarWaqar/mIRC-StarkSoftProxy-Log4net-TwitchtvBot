@@ -1,0 +1,6 @@
+D:\log4net-trunk\log4net-trunk\build\bin\log4net\net\2.0\debug\log4net.dll
+D:\log4net-trunk\log4net-trunk\build\bin\log4net\net\2.0\debug\log4net.pdb
+D:\log4net-trunk\log4net-trunk\build\bin\log4net\net\2.0\debug\log4net.xml
+D:\log4net-trunk\log4net-trunk\src\log4net\obj\Debug\log4net.vs2010.csprojResolveAssemblyReference.cache
+D:\log4net-trunk\log4net-trunk\src\log4net\obj\Debug\log4net.dll
+D:\log4net-trunk\log4net-trunk\src\log4net\obj\Debug\log4net.pdb
