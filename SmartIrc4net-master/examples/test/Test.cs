@@ -139,6 +139,11 @@ public class Test
         {
             irc.SendMessage(SendType.Message, Test.channelName, DateTime.Now.ToString());
         }
+        if(e.Data.RawMessage.Contains("#help"))
+        {
+            string helpText = readTextFile.readHelpFile();
+            irc.SendMessage(SendType.Message, Test.channelName, helpText);
+        }
         if (e.Data.RawMessage.Contains("#L"))
         {
             int index = e.Data.RawMessage.IndexOf('#');

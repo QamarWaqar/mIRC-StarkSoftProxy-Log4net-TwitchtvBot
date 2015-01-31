@@ -23,5 +23,12 @@ namespace ReadingFromTextFile
             sB.Append(sR.ReadLine()); sB.Append(",");
             return sB.ToString();
         }
+
+        public static string readHelpFile()
+        {
+            FileStream fS = File.OpenRead("helpTxtFile.txt");
+            StreamReader sR = new StreamReader(fS);
+            return "The available Commands are: " +sR.ReadLine();
+        }
     }
 }
