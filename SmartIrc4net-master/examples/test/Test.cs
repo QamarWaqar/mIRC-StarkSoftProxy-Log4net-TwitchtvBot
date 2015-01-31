@@ -33,6 +33,8 @@ using System.Collections.Generic;
 
 using Meebey.SmartIrc4net;
 using System.Text;
+// this is my reading a text from text file //
+using ReadingFromTextFile;
 
 // This is an VERY basic example how your IRC application could be written
 // its mainly for showing how to use the API, this program just connects sends
@@ -41,68 +43,87 @@ using System.Text;
 // There are also a few commands the IRC bot/client allows via private message.
 public class Test
 {
+    // this is my string that will be filled with text from file with commas //
+    public static string channelName;
+    public static string botName;
+    public static string botOAuth;
+    public static void fillTextFileString()
+    {
+        // this will return the contents of the file with commas //
+        string fileContentsWithCommas = ReadingFromTextFile.readTextFile.readTxtFile();
+        // now filling channelName and botName and botOAuth //
+        string[] strArr = fileContentsWithCommas.Split(',');
+        channelName = strArr[0];
+        botName = strArr[1];
+        botOAuth = strArr[2];
+    }
+
     // make an instance of the high-level API
     public static IrcClient irc = new IrcClient();
 
     // this method we will use to analyse queries (also known as private messages)
     public static void OnQueryMessage(object sender, IrcEventArgs e)
     {
-        switch (e.Data.MessageArray[0]) {
+        switch (e.Data.MessageArray[0])
+        {
             // debug stuff
             case "dump_channel":
                 string requested_channel = e.Data.MessageArray[1];
                 // getting the channel (via channel sync feature)
                 Channel channel = irc.GetChannel(requested_channel);
-                
+
                 // here we send messages
-                irc.SendMessage(SendType.Message, e.Data.Nick, "<channel '"+requested_channel+"'>");
-                
-                irc.SendMessage(SendType.Message, e.Data.Nick, "Name: '"+channel.Name+"'");
-                irc.SendMessage(SendType.Message, e.Data.Nick, "Topic: '"+channel.Topic+"'");
-                irc.SendMessage(SendType.Message, e.Data.Nick, "Mode: '"+channel.Mode+"'");
-                irc.SendMessage(SendType.Message, e.Data.Nick, "Key: '"+channel.Key+"'");
-                irc.SendMessage(SendType.Message, e.Data.Nick, "UserLimit: '"+channel.UserLimit+"'");
-                
+                irc.SendMessage(SendType.Message, e.Data.Nick, "<channel '" + requested_channel + "'>");
+
+                irc.SendMessage(SendType.Message, e.Data.Nick, "Name: '" + channel.Name + "'");
+                irc.SendMessage(SendType.Message, e.Data.Nick, "Topic: '" + channel.Topic + "'");
+                irc.SendMessage(SendType.Message, e.Data.Nick, "Mode: '" + channel.Mode + "'");
+                irc.SendMessage(SendType.Message, e.Data.Nick, "Key: '" + channel.Key + "'");
+                irc.SendMessage(SendType.Message, e.Data.Nick, "UserLimit: '" + channel.UserLimit + "'");
+
                 // here we go through all users of the channel and show their
                 // hashtable key and nickname 
                 string nickname_list = "";
                 nickname_list += "Users: ";
-                foreach (DictionaryEntry de in channel.Users) {
-                    string      key         = (string)de.Key;
+                foreach (DictionaryEntry de in channel.Users)
+                {
+                    string key = (string)de.Key;
                     ChannelUser channeluser = (ChannelUser)de.Value;
                     nickname_list += "(";
-                    if (channeluser.IsOp) {
+                    if (channeluser.IsOp)
+                    {
                         nickname_list += "@";
                     }
-                    if (channeluser.IsVoice) {
+                    if (channeluser.IsVoice)
+                    {
                         nickname_list += "+";
                     }
-                    nickname_list += ")"+key+" => "+channeluser.Nick+", ";
+                    nickname_list += ")" + key + " => " + channeluser.Nick + ", ";
                 }
                 irc.SendMessage(SendType.Message, e.Data.Nick, nickname_list);
 
                 irc.SendMessage(SendType.Message, e.Data.Nick, "</channel>");
-            break;
+                break;
             case "gc":
                 GC.Collect();
-            break;
+                break;
             // typical commands
             case "join":
                 irc.RfcJoin(e.Data.MessageArray[1]);
-            break;
+                break;
             case "part":
                 irc.RfcPart(e.Data.MessageArray[1]);
-            break;
+                break;
             case "die":
                 Exit();
-            break;
+                break;
         }
     }
 
     // this method handles when we receive "ERROR" from the IRC server
     public static void OnError(object sender, ErrorEventArgs e)
     {
-        System.Console.WriteLine("Error: "+e.ErrorMessage);
+        System.Console.WriteLine("Error: " + e.ErrorMessage);
         Exit();
     }
 
@@ -113,10 +134,10 @@ public class Test
 
         // Entering my Logic to intercept the bot Commands //
         //irc.SendMessage(SendType.Message, "#Cloakers", "Hello World!");
-        string channel = "#sunidey";
+        //string channel = Test.channelName;
         if (e.Data.RawMessage.Contains("#time"))
         {
-            irc.SendMessage(SendType.Message, channel, DateTime.Now.ToString());
+            irc.SendMessage(SendType.Message, Test.channelName, DateTime.Now.ToString());
         }
         if (e.Data.RawMessage.Contains("#L"))
         {
@@ -129,7 +150,7 @@ public class Test
                 sB.Append(e.Data.RawMessage[i]);
             }
             sB.Insert(0, "<3"); sB.Append("<3", 0, 2);
-            irc.SendMessage(SendType.Message, channel, sB.ToString());
+            irc.SendMessage(SendType.Message, Test.channelName, sB.ToString());
         }
         if (e.Data.RawMessage.Contains("#H"))
         {
@@ -142,23 +163,26 @@ public class Test
                 sB.Append(e.Data.RawMessage[i]);
             }
             sB.Insert(0, "Dirt "); sB.Append(" Bag", 0, 4);
-            irc.SendMessage(SendType.Message, channel, sB.ToString());
+            irc.SendMessage(SendType.Message, Test.channelName, sB.ToString());
         }
     }
-    
+
     public static void Main(string[] args)
     {
+        // this is my code filling the static variables //
+        fillTextFileString();
+
         Thread.CurrentThread.Name = "Main";
-        
+
         // UTF-8 test
         irc.Encoding = System.Text.Encoding.UTF8;
-        
+
         // wait time between messages, we can set this lower on own irc servers
         irc.SendDelay = 200;
-        
+
         // we use channel sync, means we can use irc.GetChannel() and so on
         irc.ActiveChannelSyncing = true;
-        
+
         // here we connect the events of the API to our written methods
         // most have own event handler types, because they ship different data
         irc.OnQueryMessage += new IrcEventHandler(OnQueryMessage);
@@ -169,22 +193,26 @@ public class Test
         // the server we want to connect to, could be also a simple string
         serverlist = new string[] { "irc.twitch.tv" }; // change from "irc.freenode.org" to "irc.twitch.tv" //
         int port = 6667;
-        string channel = "#sunidey"; // change from "#smartirc-test" to "#cloakers" //
-        try {
+        string channel = Test.channelName; // change from "#smartirc-test" to "#cloakers" //
+        try
+        {
             // here we try to connect to the server and exceptions get handled
             irc.Connect(serverlist, port);
-        } catch (ConnectionException e) {
+        }
+        catch (ConnectionException e)
+        {
             // something went wrong, the reason will be shown
-            System.Console.WriteLine("couldn't connect! Reason: "+e.Message);
+            System.Console.WriteLine("couldn't connect! Reason: " + e.Message);
             Exit();
         }
-        
-        try {
+
+        try
+        {
             // here we logon and register our nickname and so on 
-            irc.Login("cloakersbot", "cloakersbot", 0, "cloakersbot", "oauth:e1b8eenyy6l529daw1l2m0cvkgn31r"); // change from ["SmartIRC","SmartIrc4net Test Bot"] to ["cloakers","xhlhmno8l1savabauqbzxmvwx3y11l"]
+            irc.Login(Test.botName, Test.botName, 0, Test.botName, Test.botOAuth); // change from ["SmartIRC","SmartIrc4net Test Bot"] to ["cloakers","xhlhmno8l1savabauqbzxmvwx3y11l"]
             // join the channel
             irc.RfcJoin(channel);
-            
+
             /*for (int i = 0; i < 3; i++) {
                 // here we send just 3 different types of messages, 3 times for
                 // testing the delay and flood protection (messagebuffer work)
@@ -192,62 +220,72 @@ public class Test
                 irc.SendMessage(SendType.Action, channel, "thinks this is cool ("+i.ToString()+")");
                 irc.SendMessage(SendType.Notice, channel, "SmartIrc4net rocks ("+i.ToString()+")");
             }*/
-            
+
             // spawn a new thread to read the stdin of the console, this we use
             // for reading IRC commands from the keyboard while the IRC connection
             // stays in its own thread
             new Thread(new ThreadStart(ReadCommands)).Start();
-            
+
             // here we tell the IRC API to go into a receive mode, all events
             // will be triggered by _this_ thread (main thread in this case)
             // Listen() blocks by default, you can also use ListenOnce() if you
             // need that does one IRC operation and then returns, so you need then 
             // an own loop 
             irc.Listen();
-            
+
             // when Listen() returns our IRC session is over, to be sure we call
             // disconnect manually
             irc.Disconnect();
-        } catch (ConnectionException) {
+        }
+        catch (ConnectionException)
+        {
             // this exception is handled because Disconnect() can throw a not
             // connected exception
             Exit();
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             // this should not happen by just in case we handle it nicely
-            System.Console.WriteLine("Error occurred! Message: "+e.Message);
-            System.Console.WriteLine("Exception: "+e.StackTrace);
+            System.Console.WriteLine("Error occurred! Message: " + e.Message);
+            System.Console.WriteLine("Exception: " + e.StackTrace);
             Exit();
         }
     }
-    
+
     public static void ReadCommands()
     {
         // here we read the commands from the stdin and send it to the IRC API
         // WARNING, it uses WriteLine() means you need to enter RFC commands
         // like "JOIN #test" and then "PRIVMSG #test :hello to you"
-        while (true) {
+        while (true)
+        {
             string cmd = System.Console.ReadLine();
-            if (cmd.StartsWith("/list")) {
+            if (cmd.StartsWith("/list"))
+            {
                 int pos = cmd.IndexOf(" ");
                 string channel = null;
-                if (pos != -1) {
+                if (pos != -1)
+                {
                     channel = cmd.Substring(pos + 1);
                 }
-                
+
                 IList<ChannelInfo> channelInfos = irc.GetChannelList(channel);
                 Console.WriteLine("channel count: {0}", channelInfos.Count);
-                foreach (ChannelInfo channelInfo in channelInfos) {
+                foreach (ChannelInfo channelInfo in channelInfos)
+                {
                     Console.WriteLine("channel: {0} user count: {1} topic: {2}",
                                       channelInfo.Channel,
                                       channelInfo.UserCount,
                                       channelInfo.Topic);
                 }
-            } else {
+            }
+            else
+            {
                 irc.WriteLine(cmd);
             }
         }
     }
-    
+
     public static void Exit()
     {
         // we are done, lets exit...
