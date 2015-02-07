@@ -18,9 +18,9 @@ namespace ReadingFromTextFile
 
             FileStream fS = File.OpenRead("textFileToReadFrom.txt");
             StreamReader sR = new StreamReader(fS);
-            sB.Append(sR.ReadLine()); sB.Append(",");
-            sB.Append(sR.ReadLine()); sB.Append(",");
-            sB.Append(sR.ReadLine()); sB.Append(",");
+            sB.Append(sR.ReadLine()); //sB.Append(",");
+            //sB.Append(sR.ReadLine()); sB.Append(",");
+            //sB.Append(sR.ReadLine()); sB.Append(",");
             return sB.ToString();
         }
         public static string readTwitterCredentials()
@@ -29,10 +29,10 @@ namespace ReadingFromTextFile
 
             FileStream fS = File.OpenRead("twitterCredentials.txt");
             StreamReader sR = new StreamReader(fS);
-            sB.Append(sR.ReadLine()); sB.Append(",");
-            sB.Append(sR.ReadLine()); sB.Append(",");
-            sB.Append(sR.ReadLine()); sB.Append(",");
-            sB.Append(sR.ReadLine()); sB.Append(",");
+            sB.Append(sR.ReadLine()); //sB.Append(",");
+            //sB.Append(sR.ReadLine()); sB.Append(",");
+            //sB.Append(sR.ReadLine()); sB.Append(",");
+            //sB.Append(sR.ReadLine()); sB.Append(",");
             return sB.ToString();
         }
 
