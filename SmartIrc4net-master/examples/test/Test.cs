@@ -47,6 +47,13 @@ public class Test
     public static string channelName;
     public static string botName;
     public static string botOAuth;
+
+    public static string twitterAccessToken;
+    public static string twitterAccessTokenSecret;
+    public static string twitterConsumerKey;
+    public static string twitterConsumerSecret;
+    // this is my method to fill the static string //
+    // channelName, botName, botOAuth //
     public static void fillTextFileString()
     {
         // this will return the contents of the file with commas //
@@ -56,6 +63,15 @@ public class Test
         channelName = strArr[0];
         botName = strArr[1];
         botOAuth = strArr[2];
+    }
+    public static void fillTwitterCredentiasFromFile()
+    {
+        string twitterCredentialsFromFileWithCommas = ReadingFromTextFile.readTextFile.readTwitterCredentials();
+        string[] strArr = twitterCredentialsFromFileWithCommas.Split(',');
+        twitterAccessToken = strArr[0];
+        twitterAccessTokenSecret = strArr[1];
+        twitterConsumerKey = strArr[2];
+        twitterConsumerSecret = strArr[3];
     }
 
     // make an instance of the high-level API
@@ -170,12 +186,26 @@ public class Test
             sB.Insert(0, "Dirt "); sB.Append(" Bag", 0, 4);
             irc.SendMessage(SendType.Message, Test.channelName, sB.ToString());
         }
+        if (e.Data.RawMessage.Contains("#T"))
+        {
+            int index = e.Data.RawMessage.IndexOf('#');
+            int index2 = e.Data.RawMessage.IndexOf('#', index + 1);
+            StringBuilder sB = new StringBuilder();
+            for (int i = (index2 + 2); i < e.Data.RawMessage.Length; i++)
+            {
+                sB.Append(e.Data.RawMessage[i]);
+            }
+            // And now tweet  the sB out //
+            string pubOrNot = TwitterTweetAPI.TwitterTweet.tweet(twitterAccessToken, twitterAccessTokenSecret, twitterConsumerKey, twitterConsumerSecret, sB.ToString());
+            if (pubOrNot == "True") { irc.SendMessage(SendType.Message, Test.channelName, "Your Tweet was Sent Successfully"); } else { irc.SendMessage(SendType.Message, Test.channelName, "Your Tweet was Not Sent Successfully"); }
+        }
     }
 
     public static void Main(string[] args)
     {
         // this is my code filling the static variables //
         fillTextFileString();
+        fillTwitterCredentiasFromFile();
 
         Thread.CurrentThread.Name = "Main";
 

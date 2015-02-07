@@ -1,1 +1,1 @@
-﻿#time #L[username] #H[username]
+﻿#time #L[username] #H[username] #T[Message to tweet with spaces]

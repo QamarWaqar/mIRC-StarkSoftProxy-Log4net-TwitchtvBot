@@ -23,6 +23,18 @@ namespace ReadingFromTextFile
             sB.Append(sR.ReadLine()); sB.Append(",");
             return sB.ToString();
         }
+        public static string readTwitterCredentials()
+        {
+            StringBuilder sB = new StringBuilder();
+
+            FileStream fS = File.OpenRead("twitterCredentials.txt");
+            StreamReader sR = new StreamReader(fS);
+            sB.Append(sR.ReadLine()); sB.Append(",");
+            sB.Append(sR.ReadLine()); sB.Append(",");
+            sB.Append(sR.ReadLine()); sB.Append(",");
+            sB.Append(sR.ReadLine()); sB.Append(",");
+            return sB.ToString();
+        }
 
         public static string readHelpFile()
         {

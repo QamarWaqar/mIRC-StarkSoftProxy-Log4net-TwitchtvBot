@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,6 +10,8 @@
     <RootNamespace>Test</RootNamespace>
     <StartupObject>Test</StartupObject>
     <AssemblyName>test</AssemblyName>
+    <TargetFrameworkVersion>v4.5.3</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -25,6 +27,7 @@
     <RunWithWarnings>false</RunWithWarnings>
     <Externalconsole>true</Externalconsole>
     <AssemblyOriginatorKeyFile>.</AssemblyOriginatorKeyFile>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -38,6 +41,7 @@
     <Execution>
       <Execution clr-version="Net_2_0" />
     </Execution>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SmartIrc4net.csproj">
@@ -46,7 +50,61 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\..\..\..\visual studio 2015\Projects\TwitterTweetAPI\TwitterTweetAPI\TwitterTweetAPI\bin\Debug\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks">
+      <HintPath>..\..\..\..\visual studio 2015\Projects\TwitterTweetAPI\TwitterTweetAPI\TwitterTweetAPI\bin\Debug\Microsoft.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions">
+      <HintPath>..\..\..\..\visual studio 2015\Projects\TwitterTweetAPI\TwitterTweetAPI\TwitterTweetAPI\bin\Debug\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop">
+      <HintPath>..\..\..\..\visual studio 2015\Projects\TwitterTweetAPI\TwitterTweetAPI\TwitterTweetAPI\bin\Debug\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\visual studio 2015\Projects\TwitterTweetAPI\TwitterTweetAPI\TwitterTweetAPI\bin\Debug\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PCLWebUtility">
+      <HintPath>..\..\..\..\visual studio 2015\Projects\TwitterTweetAPI\TwitterTweetAPI\TwitterTweetAPI\bin\Debug\PCLWebUtility.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Net.Http.Extensions">
+      <HintPath>..\..\..\..\visual studio 2015\Projects\TwitterTweetAPI\TwitterTweetAPI\TwitterTweetAPI\bin\Debug\System.Net.Http.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Primitives">
+      <HintPath>..\..\..\..\visual studio 2015\Projects\TwitterTweetAPI\TwitterTweetAPI\TwitterTweetAPI\bin\Debug\System.Net.Http.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="Tweetinvi">
+      <HintPath>..\..\..\..\visual studio 2015\Projects\TwitterTweetAPI\TwitterTweetAPI\TwitterTweetAPI\bin\Debug\Tweetinvi.dll</HintPath>
+    </Reference>
+    <Reference Include="Tweetinvi.Controllers">
+      <HintPath>..\..\..\..\visual studio 2015\Projects\TwitterTweetAPI\TwitterTweetAPI\TwitterTweetAPI\bin\Debug\Tweetinvi.Controllers.dll</HintPath>
+    </Reference>
+    <Reference Include="Tweetinvi.Core">
+      <HintPath>..\..\..\..\visual studio 2015\Projects\TwitterTweetAPI\TwitterTweetAPI\TwitterTweetAPI\bin\Debug\Tweetinvi.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Tweetinvi.Credentials">
+      <HintPath>..\..\..\..\visual studio 2015\Projects\TwitterTweetAPI\TwitterTweetAPI\TwitterTweetAPI\bin\Debug\Tweetinvi.Credentials.dll</HintPath>
+    </Reference>
+    <Reference Include="Tweetinvi.Factories">
+      <HintPath>..\..\..\..\visual studio 2015\Projects\TwitterTweetAPI\TwitterTweetAPI\TwitterTweetAPI\bin\Debug\Tweetinvi.Factories.dll</HintPath>
+    </Reference>
+    <Reference Include="Tweetinvi.Logic">
+      <HintPath>..\..\..\..\visual studio 2015\Projects\TwitterTweetAPI\TwitterTweetAPI\TwitterTweetAPI\bin\Debug\Tweetinvi.Logic.dll</HintPath>
+    </Reference>
+    <Reference Include="Tweetinvi.Security">
+      <HintPath>..\..\..\..\visual studio 2015\Projects\TwitterTweetAPI\TwitterTweetAPI\TwitterTweetAPI\bin\Debug\Tweetinvi.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Tweetinvi.Streams">
+      <HintPath>..\..\..\..\visual studio 2015\Projects\TwitterTweetAPI\TwitterTweetAPI\TwitterTweetAPI\bin\Debug\Tweetinvi.Streams.dll</HintPath>
+    </Reference>
+    <Reference Include="Tweetinvi.WebLogic">
+      <HintPath>..\..\..\..\visual studio 2015\Projects\TwitterTweetAPI\TwitterTweetAPI\TwitterTweetAPI\bin\Debug\Tweetinvi.WebLogic.dll</HintPath>
+    </Reference>
+    <Reference Include="TwitterTweetAPI">
+      <HintPath>..\..\..\..\visual studio 2015\Projects\TwitterTweetAPI\TwitterTweetAPI\TwitterTweetAPI\bin\Debug\TwitterTweetAPI.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -57,5 +115,9 @@
   <ItemGroup>
     <Content Include="helpTxtFile.txt" />
     <Content Include="textFileToReadFrom.txt" />
+    <Content Include="twitterCredentials.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
 </Project>
