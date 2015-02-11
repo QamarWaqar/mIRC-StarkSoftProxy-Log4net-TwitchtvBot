@@ -47,11 +47,15 @@ public class Test
     public static string channelName;
     public static string botName;
     public static string botOAuth;
-
+    // -------------------------------------------------------------------- //
     public static string twitterAccessToken;
     public static string twitterAccessTokenSecret;
     public static string twitterConsumerKey;
     public static string twitterConsumerSecret;
+    // this is my array which will store the list of moderators of the channel including the broadcaster //
+    public static int modArrayInt = 0;
+    public static string[] modArray = new string[100];
+
     // this is my method to fill the static string //
     // channelName, botName, botOAuth //
     public static void fillTextFileString()
@@ -155,14 +159,32 @@ public class Test
         {
             irc.SendMessage(SendType.Message, Test.channelName, DateTime.Now.ToString());
         }
-        if(e.Data.RawMessage.Contains("#help"))
+        if (e.Data.RawMessage.Contains("#help"))
         {
             string helpText = readTextFile.readHelpFile();
             irc.SendMessage(SendType.Message, Test.channelName, helpText);
         }
+        if (e.Data.RawMessage.Contains(":jtv") && !(e.Data.RawMessage.Contains("!")) && e.Data.RawMessage.Contains("+o"))
+        {
+            // the pattern string that we are looking for is //
+            // Received: :jtv MODE #cloakers -o cloakers //
+            // now we have to extract the string after the # but do not include the space after it //
+            int index = e.Data.RawMessage.IndexOf("#");
+            // index # = 20 // always // add in it channel name lenght, plus space and +o and a space //
+            //                                                          +1 +2 +1                      //
+            // so index2+1 will be the starting index of the operators name till the end of string //
+            int index2 = index + Test.channelName.Length + 1 + 2 + 1;
+            StringBuilder sB = new StringBuilder();
+            for (int i = index2; i < e.Data.RawMessage.Length; i++)
+            {
+                //if (e.Data.RawMessage[i] == ' ') { break; }
+                sB.Append(e.Data.RawMessage[i]);
+            }
+            modArray[modArrayInt++] = sB.ToString();
+        }
         if (e.Data.RawMessage.Contains("#L"))
         {
-            int index = e.Data.RawMessage.IndexOf('#');
+            /*int index = e.Data.RawMessage.IndexOf('#');
             int index2 = e.Data.RawMessage.IndexOf('#', index + 1);
             StringBuilder sB = new StringBuilder();
             for (int i = (index2 + 2); i < e.Data.RawMessage.Length; i++)
@@ -171,9 +193,16 @@ public class Test
                 sB.Append(e.Data.RawMessage[i]);
             }
             sB.Insert(0, "<3"); sB.Append("<3", 0, 2);
-            irc.SendMessage(SendType.Message, Test.channelName, sB.ToString());
+            irc.SendMessage(SendType.Message, Test.channelName, sB.ToString());*/
+
+            /*StringBuilder sB = new StringBuilder();
+            for (int i = 0; i <= (modArrayInt - 1); i++)
+            {
+                sB.Append(modArray[i]);
+            }
+            irc.SendMessage(SendType.Message, Test.channelName, sB.ToString());*/
         }
-        if (e.Data.RawMessage.Contains("#H"))
+        /*if (e.Data.RawMessage.Contains("#H"))
         {
             int index = e.Data.RawMessage.IndexOf('#');
             int index2 = e.Data.RawMessage.IndexOf('#', index + 1);
@@ -185,22 +214,33 @@ public class Test
             }
             sB.Insert(0, "Dirt "); sB.Append(" Bag", 0, 4);
             irc.SendMessage(SendType.Message, Test.channelName, sB.ToString());
-        }
+        }*/
         if (e.Data.RawMessage.Contains("#T"))
         {
-            int index = e.Data.RawMessage.IndexOf('#');
-            int index2 = e.Data.RawMessage.IndexOf('#', index + 1);
-            StringBuilder sB = new StringBuilder();
-            for (int i = (index2 + 2); i < e.Data.RawMessage.Length; i++)
+            bool checkMod = false;
+            for (int i = 0; i <= (modArrayInt - 1); i++)
             {
-                sB.Append(e.Data.RawMessage[i]);
+                if (e.Data.Ident == modArray[i]) { checkMod = true; }
             }
-            // And now tweet  the sB out //
-            string pubOrNot = TwitterTweetAPI.TwitterTweet.tweet(twitterAccessToken, twitterAccessTokenSecret, twitterConsumerKey, twitterConsumerSecret, sB.ToString());
-            if (pubOrNot == "True") { irc.SendMessage(SendType.Message, Test.channelName, "Your Tweet was Sent Successfully"); } else { irc.SendMessage(SendType.Message, Test.channelName, "Your Tweet was Not Sent Successfully"); }
+            /*foreach (var item in modArray)
+            {
+                if (e.Data.RawMessage.Contains(item)) { checkMod = true; }
+            }*/
+            if (checkMod)
+            {
+                int index = e.Data.RawMessage.IndexOf('#');
+                int index2 = e.Data.RawMessage.IndexOf('#', index + 1);
+                StringBuilder sB = new StringBuilder();
+                for (int i = (index2 + 2); i < e.Data.RawMessage.Length; i++)
+                {
+                    sB.Append(e.Data.RawMessage[i]);
+                }
+                // And now tweet  the sB out //
+                string pubOrNot = TwitterTweetAPI.TwitterTweet.tweet(twitterAccessToken, twitterAccessTokenSecret, twitterConsumerKey, twitterConsumerSecret, sB.ToString());
+                if (pubOrNot == "True") { irc.SendMessage(SendType.Message, Test.channelName, "Your Tweet was Sent Successfully"); } else { irc.SendMessage(SendType.Message, Test.channelName, "Your Tweet was Not Sent Successfully"); }
+            }
         }
     }
-
     public static void Main(string[] args)
     {
         // this is my code filling the static variables //
